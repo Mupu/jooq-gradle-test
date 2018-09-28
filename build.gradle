@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'nu.studer.jooq' version '3.0.2'
+    id 'application'
+}
+
+group 'me.mupu'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+mainClassName = "me.mupu.Application"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    jooqRuntime 'mysql:mysql-connector-java:8.0.12'
+    implementation 'org.jooq:jooq:3.11.5'
+    implementation 'org.jooq:jooq-meta:3.11.5'
+    implementation 'org.jooq:jooq-codegen:3.11.5'
+    implementation 'mysql:mysql-connector-java:8.0.12'
+}
+
+jooq {
+    version = '3.11.5'
+    sample(sourceSets.main) {
+        jdbc {
+//            driver = 'com.mysql.cj.jdbc.Driver'
+//            url = 'jdbc:mysql://192.168.2.119:3306/meetnow?serverTimezone=UTC'
+//            user = 'mupu'
+//            password = 'mupu'
+
+            user = System.getProperty("user")
+            password = System.getProperty("password")
+            url = System.getProperty("url")
+            driver = System.getProperty("driver")
+
+        }
+        generator {
+            database {
+                name = 'org.jooq.meta.mysql.MySQLDatabase'
+                inputSchema = 'meetnow'
+            }
+            target {
+                packageName = 'jooq'
+            }
+        }
+    }
+}
+
+task runMain(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "me.mupu.Application"
+    args "arg1", "arg2"
+    systemProperties(System.getProperties().subMap(["user", "password", "url", "driver"]))
+}
