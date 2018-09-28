@@ -4,12 +4,12 @@ plugins {
     id 'application'
 }
 
-//run the properties.gradle script
-apply from: 'properties.gradle'
-
 group 'me.mupu'
 version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
+
+//run the properties.gradle script
+apply from: 'properties.gradle'
 
 repositories {
     mavenLocal()
