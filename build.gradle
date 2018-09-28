@@ -27,11 +27,6 @@ jooq {
     version = '3.11.5'
     sample(sourceSets.main) {
         jdbc {
-//            driver = 'com.mysql.cj.jdbc.Driver'
-//            url = 'jdbc:mysql://192.168.2.119:3306/meetnow?serverTimezone=UTC'
-//            user = 'mupu'
-//            password = 'mupu'
-
             user = System.getProperty("user")
             password = System.getProperty("password")
             url = System.getProperty("url")
@@ -41,7 +36,7 @@ jooq {
         generator {
             database {
                 name = 'org.jooq.meta.mysql.MySQLDatabase'
-                inputSchema = 'meetnow'
+                inputSchema = System.getProperty("databaseName")
             }
             target {
                 packageName = 'jooq'
