@@ -4,11 +4,12 @@ plugins {
     id 'application'
 }
 
+//run the properties.gradle script
+apply from: 'properties.gradle'
+
 group 'me.mupu'
 version '1.0-SNAPSHOT'
-
 sourceCompatibility = 1.8
-mainClassName = "me.mupu.Application"
 
 repositories {
     mavenLocal()
@@ -27,16 +28,15 @@ jooq {
     version = '3.11.5'
     sample(sourceSets.main) {
         jdbc {
-            user = System.getProperty("user")
-            password = System.getProperty("password")
-            url = System.getProperty("url")
-            driver = System.getProperty("driver")
-
+            user = puser
+            password = ppassword
+            url = purl
+            driver = pdriver
         }
         generator {
             database {
                 name = 'org.jooq.meta.mysql.MySQLDatabase'
-                inputSchema = System.getProperty("databaseName")
+                inputSchema = pdatabaseName
             }
             target {
                 packageName = 'jooq'
@@ -48,6 +48,10 @@ jooq {
 task runMain(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     main = "me.mupu.Application"
-    args "arg1", "arg2"
-    systemProperties(System.getProperties().subMap(["user", "password", "url", "driver"]))
+    //   add system properties so the java programm can get this data
+    System.setProperty("user", "$puser")
+    System.setProperty("password", "$ppassword")
+    System.setProperty("url", "$purl")
+    System.setProperty("driver", "$pdriver")
+    systemProperties(System.getProperties().subMap(["user","password","url","driver"]))
 }

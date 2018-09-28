@@ -14,13 +14,9 @@ import static jooq.Tables.*;
 public class Application {
     public static void main(String[] args) throws Exception {
         System.getProperties().setProperty("org.jooq.no-logo", "true");
-        String user = System.getProperty("user");
-        String password = System.getProperty("password");
-        String url = System.getProperty("url");
-        String driver = System.getProperty("driver");
 
-        Class.forName(driver).newInstance();
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        Class.forName(System.getProperty("driver")).newInstance();
+        try (Connection connection = DriverManager.getConnection(System.getProperty("url"), System.getProperty("user"), System.getProperty("password"))) {
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
             Result<Record2<String, String>> result = dslContext.select(PERSON.NACHNAME, PERSON.VORNAME).from(PERSON).orderBy(PERSON.VORNAME.asc()).fetch();
 
